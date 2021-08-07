@@ -98,7 +98,7 @@ namespace EmployeePayrollRestAPITesting
             Assert.AreEqual(responseOne, HttpStatusCode.Created);
             Assert.AreEqual(responseTwo, HttpStatusCode.Created);
         }
-        //method to update values for given id
+        //Usecase 4: Method to update values for given ID
         [TestMethod]
         public void GivenPUTAPI_retrunResponse()
         {
@@ -112,6 +112,23 @@ namespace EmployeePayrollRestAPITesting
             var result = JsonConvert.DeserializeObject<EmployeeModel>(response.Content);
             Console.WriteLine("Id: {0} || Name: {1} || Salary :{2} ", result.id, result.firstName + " " + result.lastName, result.salary);
             Assert.AreEqual(response.StatusCode,HttpStatusCode.OK);
+        }
+        // Usecase 5: Delete the employee details using the id
+        [TestMethod]
+        public void OnCallingDeleteAPI_DeleteEmployeeDetails()
+        {
+            //Passing the method type as put(update existing employee details)
+
+            RestRequest request = new RestRequest("/employees/7", Method.DELETE);
+            IRestResponse response = client.Execute(request);
+            //check count after deletion
+            IRestResponse getresponse = GetAllEmployees();
+            List<EmployeeModel> resultList = JsonConvert.DeserializeObject<List<EmployeeModel>>(getresponse.Content);
+            foreach(var result in resultList)
+            {
+                Console.WriteLine("Id: {0} || Name: {1} || Salary :{2} ", result.id, result.firstName + " " + result.lastName, result.salary);
+            }
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }
