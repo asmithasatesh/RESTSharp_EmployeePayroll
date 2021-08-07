@@ -12,6 +12,7 @@ namespace EmployeePayrollRestAPITesting
     {
         //Initializing the restclient as null
         RestClient client = null;
+        EmployeeModel employee;
         [TestInitialize]
         //Setup base 
         public void SetUp()
@@ -46,7 +47,7 @@ namespace EmployeePayrollRestAPITesting
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
-        //Add an employee to Json server
+        //Usecase 2: Add an employee to Json server
         [TestMethod]
         public void OnCallingPOSTAPI_ReturnEmployees()
         {
@@ -64,6 +65,38 @@ namespace EmployeePayrollRestAPITesting
             Assert.AreEqual("Rakesh Kumar", result.firstName+" "+result.lastName);
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
 
+        }
+        //add data to json server
+        public IRestResponse AddingInJsonServer(JsonObject jsonObject)
+        {
+            RestRequest request = new RestRequest("/Employees", Method.POST);
+            request.AddParameter("application/json", jsonObject, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            return response;
+
+        }
+        //Usecase 3: 
+        [TestMethod]
+        public void OnCallingPostAPI_Adding_MultipleData()
+        {
+            //Create Json object for employee one
+            JsonObject employeeOne = new JsonObject();
+            employeeOne.Add("firstName", "Dhana");
+            employeeOne.Add("lastName", "Lakshmi");
+            employeeOne.Add("salary", 700000);
+            //Call Function to Add
+            HttpStatusCode responseOne = AddingInJsonServer(employeeOne).StatusCode;
+
+            //Create Json object for employee Two
+            JsonObject employeeTwo = new JsonObject();
+            employeeTwo.Add("firstName", "Sunita");
+            employeeTwo.Add("lastName", "Biswas");
+            employeeTwo.Add("salary", 750000);
+            //Call Function to Add
+            HttpStatusCode responseTwo = AddingInJsonServer(employeeOne).StatusCode;
+
+            Assert.AreEqual(responseOne, HttpStatusCode.Created);
+            Assert.AreEqual(responseTwo, HttpStatusCode.Created);
         }
     }
 }
