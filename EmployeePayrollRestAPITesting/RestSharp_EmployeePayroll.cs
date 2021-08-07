@@ -93,7 +93,7 @@ namespace EmployeePayrollRestAPITesting
             employeeTwo.Add("lastName", "Biswas");
             employeeTwo.Add("salary", 750000);
             //Call Function to Add
-            HttpStatusCode responseTwo = AddingInJsonServer(employeeOne).StatusCode;
+            HttpStatusCode responseTwo = AddingInJsonServer(employeeTwo).StatusCode;
 
             Assert.AreEqual(responseOne, HttpStatusCode.Created);
             Assert.AreEqual(responseTwo, HttpStatusCode.Created);
