@@ -44,7 +44,26 @@ namespace EmployeePayrollRestAPITesting
 
             //Check the status code 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
- 
+        }
+
+        //Add an employee to Json server
+        [TestMethod]
+        public void OnCallingPOSTAPI_ReturnEmployees()
+        {
+            RestRequest request = new RestRequest("/Employees", Method.POST);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.Add("firstName", "Rakesh");
+            jsonObject.Add("lastName", "Kumar");
+            jsonObject.Add("salary", 3000000);
+
+            //Adds a parameter to request 
+            request.AddParameter("application/json", jsonObject, ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            var result = JsonConvert.DeserializeObject<EmployeeModel>(response.Content);
+            Console.WriteLine("Id: {0} || Name: {1} || Salary :{2} ", result.id, result.firstName + " " + result.lastName, result.salary);
+            Assert.AreEqual("Rakesh Kumar", result.firstName+" "+result.lastName);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+
         }
     }
 }
