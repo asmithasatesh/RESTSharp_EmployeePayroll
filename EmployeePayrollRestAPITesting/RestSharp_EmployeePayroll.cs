@@ -98,5 +98,20 @@ namespace EmployeePayrollRestAPITesting
             Assert.AreEqual(responseOne, HttpStatusCode.Created);
             Assert.AreEqual(responseTwo, HttpStatusCode.Created);
         }
+        //method to update values for given id
+        [TestMethod]
+        public void GivenPUTAPI_retrunResponse()
+        {
+            RestRequest request = new RestRequest("/Employees/7", Method.PUT);
+            JsonObject json = new JsonObject();
+            json.Add("firstName", "Prabhu");
+            json.Add("lastLame", "Dev");
+            json.Add("salary",800000);
+            request.AddJsonBody(json);
+            IRestResponse response = client.Execute(request);
+            var result = JsonConvert.DeserializeObject<EmployeeModel>(response.Content);
+            Console.WriteLine("Id: {0} || Name: {1} || Salary :{2} ", result.id, result.firstName + " " + result.lastName, result.salary);
+            Assert.AreEqual(response.StatusCode,HttpStatusCode.OK);
+        }
     }
 }
